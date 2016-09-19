@@ -1,0 +1,11 @@
+services:
+
+    task.status.listener:
+        class: MPS\Bundle\TaskBundle\EventListener\StatusListener
+        tags:
+            - { name: doctrine.event_listener, event: postLoad }
+
+    task.status.subscriber:
+        class: MPS\Bundle\TaskBundle\EventListener\StatusListenerSubscriber
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }

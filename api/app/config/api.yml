@@ -1,0 +1,16 @@
+sylius_resource:
+    resources:
+        mps.task:
+            driver: doctrine/orm
+            classes:
+                model: MPS\Bundle\TaskBundle\Entity\Task
+
+fos_rest:
+    disable_csrf_role: ROLE_API
+    view:
+        formats:
+            json: true
+            xml:  true
+    format_listener:
+        rules:
+            - { path: '^/', priorities: ['json', 'xml'], fallback_format: json, prefer_extension: true }

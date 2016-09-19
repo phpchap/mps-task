@@ -1,0 +1,24 @@
+MPS\Bundle\TaskBundle\Entity\Task:
+    type: entity
+    table: null
+    repositoryClass: MPS\Bundle\TaskBundle\Repository\TaskRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+            length: 255
+        description:
+            type: text
+        status:
+            type: string
+        createdAt:
+            type: datetime
+        updatedAt:
+            type: datetime
+
+    lifecycleCallbacks: {  }
