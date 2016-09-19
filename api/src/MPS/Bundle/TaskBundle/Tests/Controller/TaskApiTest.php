@@ -10,37 +10,36 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class TaskApiTest extends JsonApiTestCase
 {
-//    /**
-//     * @test
-//     */
-//    public function shouldCreateATask()
-//    {
-//        // setup
-//        // test
-//        $this->client = $this->createNewTask();
-//
-//        // assert
-//        $response = $this->client->getResponse();
-//        $this->assertResponse($response, 'tasks/create_task_response', Response::HTTP_CREATED);
-//    }
-//
-//    /**
-//     * @test
-//     */
-//    public function shouldCreateAndGetATask()
-//    {
-//        // setup
-//        $this->client = $this->createNewTask();
-//
-//        // test
-//        $this->client->request('GET', '/tasks/', [], [], ['CONTENT_TYPE' => 'application/json']);
-//        $response = json_decode($this->client->getResponse()->getContent(), true);
-//
-//        // assert
-//        $this->assertSame(1, count($response['_embedded']['items']));
-//        $this->assertSame('Read Email', $response['_embedded']['items'][0]['title']);
-//    }
-//
+    /**
+     * @test
+     */
+    public function shouldCreateATask()
+    {
+        // setup
+        // test
+        $this->client = $this->createNewTask();
+
+        // assert
+        $response = $this->client->getResponse();
+        $this->assertResponse($response, 'tasks/create_task_response', Response::HTTP_CREATED);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCreateAndGetATask()
+    {
+        // setup
+        $this->client = $this->createNewTask();
+
+        // test
+        $this->client->request('GET', '/tasks/', [], [], ['CONTENT_TYPE' => 'application/json']);
+        $response = json_decode($this->client->getResponse()->getContent(), true);
+
+        // assert
+        $this->assertSame(1, count($response['_embedded']['items']));
+        $this->assertSame('Read Email', $response['_embedded']['items'][0]['title']);
+    }
 
     /**
      * @test
@@ -56,10 +55,29 @@ class TaskApiTest extends JsonApiTestCase
 
         // test
         $this->client = $this->updateExistingTask($status, $taskId);
-        $response = json_decode($this->client->getResponse()->getContent(), true);
 
         // assert
         $this->assertSame(204, $this->client->getResponse()->getStatusCode());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCreateAndDeleteATask()
+    {
+        // setup
+        $this->client = $this->createNewTask();
+        $this->client->request('GET', '/tasks/', [], [], ['CONTENT_TYPE' => 'application/json']);
+        $response = json_decode($this->client->getResponse()->getContent(), true);
+        $taskId = $response['_embedded']['items'][0]['id'];
+
+        // test
+        $this->client = $this->deleteTask($taskId);
+        $this->client->request('GET', '/tasks/', [], [], ['CONTENT_TYPE' => 'application/json']);
+        $response = json_decode($this->client->getResponse()->getContent(), true);
+
+        // assert
+        $this->assertSame(0, $response['total']);
     }
 
     /**
@@ -93,6 +111,16 @@ class TaskApiTest extends JsonApiTestCase
         ]);
 
         $this->client->request('PATCH', '/tasks/'.$taskId, [], [], ['CONTENT_TYPE' => 'application/json'], $data);
+        return $this->client;
+    }
+
+    /**
+     * @param $taskId
+     * @return \Symfony\Bundle\FrameworkBundle\Client
+     */
+    protected function deleteTask($taskId)
+    {
+        $this->client->request('DELETE', '/tasks/'.$taskId, [], [], ['CONTENT_TYPE' => 'application/json']);
         return $this->client;
     }
 }
