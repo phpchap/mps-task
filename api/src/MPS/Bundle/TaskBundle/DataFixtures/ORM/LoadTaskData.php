@@ -47,7 +47,7 @@ class LoadTaskData implements FixtureInterface
 
         $task = new Task;
         $task->setTitle("fifth");
-        $task->setStatus("done");
+        $task->setStatus("completed");
         $task->setDescription("more reminders");
         $task->setCreatedAt(new \DateTime("2014-07-25T00:00:00+000"));
         $task->setUpdatedAt(new \DateTime("2014-08-25T00:00:00+000"));
